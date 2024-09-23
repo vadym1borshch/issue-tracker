@@ -1,15 +1,16 @@
 'use client'
-import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
+import { Box, Button, Flex, TextField } from '@radix-ui/themes'
 import SimpleMDE from 'react-simplemde-editor'
 import 'easymde/dist/easymde.min.css'
 import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { API } from '@/app/api/axiosInstance'
-import { useToast } from '@/contexts/ToastProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { issueSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/components/Error/ErrorMessage'
+import { useState } from 'react'
+import Spinner from '@/components/Spinner/Spinner'
 
 type FormType = z.infer<typeof issueSchema>
 
@@ -23,17 +24,20 @@ const NewIssuePage = () => {
     resolver: zodResolver(issueSchema),
   })
   const router = useRouter()
-  const { showToast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   return (
     <Box>
       <form
         onSubmit={handleSubmit(async (data) => {
-          if (!data.descriptions || !data.title) {
-            showToast('please fill all fields', 'error', 'bottom-left')
-            return
+          try {
+            setIsSubmitting(true)
+            await API.post('/issues', data)
+            router.push('/issues')
+          } catch (error) {
+            setIsSubmitting(false)
+            console.log(error)
           }
-          await API.post('/issues', data)
-          router.push('/issues')
         })}
         className="flex flex-col gap-2 p-3"
       >
@@ -49,7 +53,9 @@ const NewIssuePage = () => {
           />
           <ErrorMessage>{errors.descriptions?.message}</ErrorMessage>
         </Flex>
-        <Button className="w-[140px]">Submit New Issue</Button>
+        <Button disabled={isSubmitting} className="w-[140px]">
+          Submit New Issue {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </Box>
   )
