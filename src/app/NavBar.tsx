@@ -7,7 +7,7 @@ import { HiOutlineSun } from 'react-icons/hi2'
 import { AiFillMoon } from 'react-icons/ai'
 import classnames from 'classnames'
 import { Box, Button } from '@radix-ui/themes'
-import { ThemeContext } from '@/app/ThemeProvider'
+import { ThemeContext } from '@/app/MainProvider'
 
 const links = [
   {
@@ -41,8 +41,8 @@ const NavBar = () => {
               key={link.id}
               href={link.href}
               className={classnames({
-                'link-error': pathname === link.href,
-                'link-accent': pathname !== link.href,
+                'text-sky-500': pathname === link.href,
+                'text-sky-300': pathname !== link.href,
                 'transition duration-200': true,
               })}
             >

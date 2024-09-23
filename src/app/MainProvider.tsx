@@ -2,6 +2,7 @@
 
 import React, { createContext, ReactNode, useState } from 'react'
 import { Theme } from '@radix-ui/themes'
+import { ToastProvider } from '@/contexts/ToastProvider'
 
 type Theme = 'light' | 'dark'
 
@@ -18,7 +19,7 @@ interface IThemeProviderProps {
   children: ReactNode
 }
 
-const ThemeProvider = ({ children }: IThemeProviderProps) => {
+const MainProvider = ({ children }: IThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>('light')
 
   const toggleTheme = () => {
@@ -34,10 +35,10 @@ const ThemeProvider = ({ children }: IThemeProviderProps) => {
         panelBackground="solid"
         radius="large"
       >
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </Theme>
     </ThemeContext.Provider>
   )
 }
 
-export default ThemeProvider
+export default MainProvider
