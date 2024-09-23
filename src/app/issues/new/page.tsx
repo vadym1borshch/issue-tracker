@@ -1,19 +1,27 @@
 'use client'
-import { Box, Button, Flex, TextField } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import SimpleMDE from 'react-simplemde-editor'
 import 'easymde/dist/easymde.min.css'
 import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { API } from '@/app/api/axiosInstance'
 import { useToast } from '@/contexts/ToastProvider'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { issueSchema } from '@/app/validationSchemas'
+import { z } from 'zod'
+import ErrorMessage from '@/components/Error/ErrorMessage'
 
-interface IForm {
-  title: string
-  descriptions: string
-}
+type FormType = z.infer<typeof issueSchema>
 
 const NewIssuePage = () => {
-  const { control, handleSubmit, register } = useForm<IForm>()
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FormType>({
+    resolver: zodResolver(issueSchema),
+  })
   const router = useRouter()
   const { showToast } = useToast()
   return (
@@ -31,6 +39,7 @@ const NewIssuePage = () => {
       >
         <Flex direction="column" gap="3" className="w-[50%]">
           <TextField.Root placeholder="Title" {...register('title')} />
+          <ErrorMessage>{errors.title?.message}</ErrorMessage>
           <Controller
             control={control}
             render={({ field }) => (
@@ -38,6 +47,7 @@ const NewIssuePage = () => {
             )}
             name="descriptions"
           />
+          <ErrorMessage>{errors.descriptions?.message}</ErrorMessage>
         </Flex>
         <Button className="w-[140px]">Submit New Issue</Button>
       </form>

@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
 import prisma from '../../../../prisma/cliet'
+import { issueSchema } from '@/app/validationSchemas'
 
-const schema = z.object({
-  title: z.string().min(3).max(255),
-  descriptions: z.string().min(3),
-})
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
   const issues = await prisma.issue.findMany()
   return NextResponse.json(issues, { status: 200 })
@@ -14,7 +10,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const validate = schema.safeParse(body)
+  const validate = issueSchema.safeParse(body)
   if (!validate.success) {
     return NextResponse.json({ error: validate.error.errors }, { status: 400 })
   }
