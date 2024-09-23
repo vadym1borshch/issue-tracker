@@ -1,4 +1,6 @@
 import React, { ReactNode } from 'react'
+import { Box, Button } from '@radix-ui/themes'
+import Link from 'next/link'
 
 interface IIssuesPageProps {
   children?: ReactNode
@@ -6,7 +8,11 @@ interface IIssuesPageProps {
 
 const IssuesPage = ({}: IIssuesPageProps) => {
   return (
-    <>Issues Page</>
+    <Box>
+      <Button>
+        <Link href="/issues/new">Add new Issue</Link>
+      </Button>
+    </Box>
   )
 }
 
