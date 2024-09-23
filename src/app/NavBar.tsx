@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { IoBugSharp } from 'react-icons/io5'
 import classnames from 'classnames'
+import { Button } from '@radix-ui/themes'
 
 const links = [
   {
@@ -44,7 +45,7 @@ const NavBar = () => {
         </div>
       </div>
       <div>
-        <button className="btn btn-primary">LOGIN</button>
+        <Button >LOGIN</Button>
       </div>
     </nav>
   )
