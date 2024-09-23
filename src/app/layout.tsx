@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
+import { ReactNode } from 'react'
 import '@radix-ui/themes/styles.css'
 import localFont from 'next/font/local'
-import { Theme } from '@radix-ui/themes'
 import './globals.css'
+import ThemeProvider from '@/app/ThemeProvider'
 import NavBar from '@/app/NavBar'
 
 const geistSans = localFont({
@@ -24,17 +25,18 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Theme>
+        <ThemeProvider>
           <NavBar />
           <main>{children}</main>
-        </Theme>
+           {/*<ThemePanel />*/}
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,10 +1,13 @@
 'use client'
-import React from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { IoBugSharp } from 'react-icons/io5'
+import { HiOutlineSun } from 'react-icons/hi2'
+import { AiFillMoon } from 'react-icons/ai'
 import classnames from 'classnames'
-import { Button } from '@radix-ui/themes'
+import { Box, Button } from '@radix-ui/themes'
+import { ThemeContext } from '@/app/ThemeProvider'
 
 const links = [
   {
@@ -21,14 +24,18 @@ const links = [
 
 const NavBar = () => {
   const pathname = usePathname()
+  const themeContext = useContext(ThemeContext)
 
+  if (!themeContext) return null
+
+  const { theme, toggleTheme } = themeContext
   return (
     <nav className="flex items-center justify-between border-b-2 p-5">
-      <div className="flex items-center gap-7">
+      <Box className="flex items-center gap-7">
         <Link href="/" className="transition duration-200 hover:text-amber-300">
           <IoBugSharp />
         </Link>
-        <div className="flex items-center gap-3">
+        <Box className="flex items-center gap-3">
           {links.map((link) => (
             <Link
               key={link.id}
@@ -42,11 +49,14 @@ const NavBar = () => {
               {link.label}
             </Link>
           ))}
-        </div>
-      </div>
-      <div>
-        <Button >LOGIN</Button>
-      </div>
+        </Box>
+      </Box>
+      <Box className="flex items-center gap-3" >
+        <Button onClick={toggleTheme}>
+          {theme === 'dark' ? <AiFillMoon /> : <HiOutlineSun />}
+        </Button>
+        <Button>LOGIN</Button>
+      </Box>
     </nav>
   )
 }
