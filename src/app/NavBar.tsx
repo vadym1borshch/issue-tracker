@@ -16,7 +16,7 @@ const links = [
     href: '/dashboard',
   },
   {
-    id: 1,
+    id: 2,
     label: 'Issues',
     href: '/issues',
   },
