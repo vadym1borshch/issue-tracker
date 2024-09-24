@@ -41,7 +41,7 @@ const IssueForm = ({ issue }: IIssueFormProps) => {
           } else {
             await API.post('/issues', data)
           }
-          router.push('/issues')
+          router.push('/issues/list')
           router.refresh()
         } catch (error) {
           setIsSubmitting(false)

@@ -31,7 +31,7 @@ const IssueDetails = async ({ params: { id } }: IIssueDetailsProps) => {
       </Box>
       <Box>
         <Button>
-          <Link href={`/issues/${id}/edit`}>Edit</Link>
+          <Link href={`/issues/edit/${id}`}>Edit</Link>
         </Button>
       </Box>
     </Grid>

@@ -18,7 +18,7 @@ const links = [
   {
     id: 2,
     label: 'Issues',
-    href: '/issues',
+    href: '/issues/list',
   },
 ]
 
