@@ -1,8 +1,9 @@
 'use client'
 
-import React, { createContext, ReactNode, useState } from 'react'
+import React, { createContext, ReactNode, useEffect, useState } from 'react'
 import { Theme } from '@radix-ui/themes'
 import { ToastProvider } from '@/contexts/ToastProvider'
+import NavBar from '@/app/NavBar'
 
 type Theme = 'light' | 'dark'
 
@@ -23,8 +24,20 @@ const MainProvider = ({ children }: IThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>('light')
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'))
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === 'light' ? 'dark' : 'light'
+      localStorage.setItem('theme', newTheme)
+      return newTheme
+    })
   }
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentTheme = localStorage.getItem('theme') as Theme
+      if (currentTheme) {
+        setTheme(currentTheme)
+      }
+    }
+  }, [])
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
@@ -35,7 +48,10 @@ const MainProvider = ({ children }: IThemeProviderProps) => {
         panelBackground="solid"
         radius="large"
       >
-        <ToastProvider>{children}</ToastProvider>
+        <ToastProvider>
+          <NavBar />
+          <main>{children}</main>
+        </ToastProvider>
       </Theme>
     </ThemeContext.Provider>
   )

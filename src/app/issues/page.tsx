@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react'
 import { Box, Button, Table } from '@radix-ui/themes'
-import Link from 'next/link'
 import { API } from '@/app/api/axiosInstance'
 import { MdDelete } from 'react-icons/md'
 import DeleteButton from '@/components/Button/DeleteButton'
 import IssueStatusBadge from '@/components/IssueStatusBadge/IssueStatusBadge'
 import { Issue } from '@prisma/client'
+import Link from '@/components/Link/Link'
 
 interface IIssuesPageProps {
   children?: ReactNode
@@ -35,7 +35,7 @@ const IssuesPage = async ({}: IIssuesPageProps) => {
               <Table.Row key={issue.id}>
                 <Table.Cell>
                   <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
-                  </Table.Cell>
+                </Table.Cell>
                 <Table.Cell>
                   <IssueStatusBadge status={issue.status} />
                 </Table.Cell>
