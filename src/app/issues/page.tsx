@@ -1,5 +1,4 @@
-'use client'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import { Box, Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import { API } from '@/app/api/axiosInstance'
@@ -12,16 +11,8 @@ interface IIssuesPageProps {
   children?: ReactNode
 }
 
-const IssuesPage = ({}: IIssuesPageProps) => {
-  const [issues, setIssues] = React.useState<Issue[]>([])
-
-  useEffect(() => {
-    const fetchIssues = async () => {
-      const { data } = await API.get(`/issues`)
-      setIssues(data)
-    }
-    fetchIssues()
-  }, [])
+const IssuesPage = async ({}: IIssuesPageProps) => {
+  const { data } = await API.get(`/issues`)
 
   return (
     <Box className="flex flex-col gap-4 p-4">
@@ -40,13 +31,17 @@ const IssuesPage = ({}: IIssuesPageProps) => {
           </Table.Header>
 
           <Table.Body>
-            {issues.map((issue: Issue) => (
+            {data.map((issue: Issue) => (
               <Table.Row key={issue.id}>
-                <Table.Cell>{issue.title}</Table.Cell>
+                <Table.Cell>
+                  <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+                  </Table.Cell>
                 <Table.Cell>
                   <IssueStatusBadge status={issue.status} />
                 </Table.Cell>
-                <Table.Cell>{new Date(issue.createdAt).toLocaleString()}</Table.Cell>
+                <Table.Cell>
+                  {new Date(issue.createdAt).toLocaleString()}
+                </Table.Cell>
                 <Table.Cell>
                   <DeleteButton issueId={issue.id}>
                     <MdDelete />
