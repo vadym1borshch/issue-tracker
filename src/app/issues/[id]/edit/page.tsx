@@ -2,7 +2,13 @@ import React from 'react'
 import { API } from '@/app/api/axiosInstance'
 import { Issue } from '@prisma/client'
 import { Box } from '@radix-ui/themes'
-import IssueForm from '@/app/issues/_components/IssueForm'
+import dynamic from 'next/dynamic'
+import LoadingFormPage from '@/app/issues/_components/LoadingFormPage'
+
+const IssueForm = dynamic(() => import('@/app/issues/_components/IssueForm'), {
+  ssr: false,
+  loading: () => <LoadingFormPage />,
+})
 
 interface IEditIssuePageProps {
   params: { id: string }

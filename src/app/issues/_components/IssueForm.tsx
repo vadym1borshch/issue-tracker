@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Flex, TextField } from '@radix-ui/themes'
 import { z } from 'zod'
-import dynamic from 'next/dynamic'
+import SimpleMDE from 'react-simplemde-editor'
 import 'easymde/dist/easymde.min.css'
 import { API } from '@/app/api/axiosInstance'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,10 +12,6 @@ import { issueSchema } from '@/app/validationSchemas'
 import ErrorMessage from '@/components/Error/ErrorMessage'
 import Spinner from '@/components/Spinner/Spinner'
 import { Issue } from '@prisma/client'
-
-const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
-  ssr: false,
-})
 
 type FormType = z.infer<typeof issueSchema>
 
@@ -42,11 +38,11 @@ const IssueForm = ({ issue }: IIssueFormProps) => {
           setIsSubmitting(true)
           if (issue) {
             await API.patch(`/issues/${issue.id}`, data)
-            router.push('/issues')
-            return
+          } else {
+            await API.post('/issues', data)
           }
-          await API.post('/issues', data)
           router.push('/issues')
+          router.refresh()
         } catch (error) {
           setIsSubmitting(false)
           console.log(error)
@@ -65,7 +61,6 @@ const IssueForm = ({ issue }: IIssueFormProps) => {
           control={control}
           render={({ field }) => (
             <SimpleMDE
-              defaultValue={issue?.descriptions}
               ref={null}
               value={issue?.descriptions ? issue.descriptions : field.value}
               onChange={(value: string) => field.onChange(value)}

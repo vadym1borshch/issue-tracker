@@ -22,7 +22,7 @@ const IssueDetails = async ({ params: { id } }: IIssueDetailsProps) => {
           <Box>{new Date(data.createdAt).toDateString()}</Box>
         </Flex>
         <Card className="prose">
-          <ReactMarkdown>
+          <ReactMarkdown className="text-white">
             {Array.isArray(data.descriptions)
               ? data.descriptions.join(' ')
               : data.descriptions}

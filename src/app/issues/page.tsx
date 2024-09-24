@@ -62,4 +62,6 @@ const IssuesPage = async ({}: IIssuesPageProps) => {
   )
 }
 
+export const dynamic = 'force-dynamic'
+
 export default IssuesPage
