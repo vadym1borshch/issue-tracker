@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '../../../../prisma/cliet'
+import prisma from '../../../../prisma/client'
 import { issueSchema } from '@/app/validationSchemas'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/authOptions'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
@@ -9,6 +11,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) {
+    return NextResponse.json({}, { status: 401 })
+  }
   const body = await req.json()
   const validate = issueSchema.safeParse(body)
   if (!validate.success) {
@@ -23,4 +29,3 @@ export async function POST(req: NextRequest) {
   })
   return NextResponse.json(newIssue, { status: 201 })
 }
-

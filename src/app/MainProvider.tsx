@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, ReactNode, useEffect, useState } from 'react'
+import { SessionProvider } from 'next-auth/react'
 import { Theme } from '@radix-ui/themes'
 import { ToastProvider } from '@/contexts/ToastProvider'
 import NavBar from '@/app/NavBar'
@@ -49,8 +50,10 @@ const MainProvider = ({ children }: IThemeProviderProps) => {
         radius="large"
       >
         <ToastProvider>
-          <NavBar />
-          <main>{children}</main>
+          <SessionProvider>
+            <NavBar />
+            <main>{children}</main>
+          </SessionProvider>
         </ToastProvider>
       </Theme>
     </ThemeContext.Provider>

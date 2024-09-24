@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { ReactNode } from 'react'
-import '@radix-ui/themes/styles.css'
 import localFont from 'next/font/local'
 import './globals.css'
 import MainProvider from '@/app/MainProvider'
