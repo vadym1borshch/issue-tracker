@@ -45,7 +45,7 @@ const MainProvider = ({ children }: IThemeProviderProps) => {
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <Theme
         appearance={theme}
-        accentColor={theme === 'dark' ? 'amber' : 'blue'}
+        accentColor={theme === 'dark' ? 'green' : 'blue'}
         grayColor="sage"
         panelBackground="solid"
         radius="large"

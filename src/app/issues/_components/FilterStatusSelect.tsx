@@ -1,9 +1,8 @@
 'use client'
 import React, { ReactNode } from 'react'
-import { API } from '@/app/api/axiosInstance'
 import { Select } from '@radix-ui/themes'
 import { Status } from '@prisma/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const statuses: { label: string; value?: Status }[] = [
   { label: 'All' },
@@ -18,10 +17,20 @@ interface IFilterStatusSelectProps {
 
 const FilterStatusSelect = ({}: IFilterStatusSelectProps) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
   return (
     <Select.Root
+      defaultValue={searchParams.get('status') || 'All'}
       onValueChange={(status) => {
-        const query = status === 'All' ? '' : `?status=${status}`
+        const params = new URLSearchParams()
+        if (status !== 'All') {
+          params.append('status', status)
+        }
+        if (searchParams.get('orderBy')) {
+          params.append('orderBy', searchParams.get('orderBy')!)
+        }
+
+        const query = params.size ? `?${params.toString()}` : ''
         router.push(`/issues/list/${query}`)
       }}
     >

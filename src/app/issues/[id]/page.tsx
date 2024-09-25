@@ -24,8 +24,8 @@ const IssueDetails = async ({ params: { id } }: IIssueDetailsProps) => {
         <IssueStatusBadge status={data.status} />
         <Box>{new Date(data.createdAt).toDateString()}</Box>
       </Flex>
-      <Card className="prose relative bg-white">
-        <ReactMarkdown className="text-black bg-white">
+      <Card className="prose relative ">
+        <ReactMarkdown className="text-black bg-gray-300">
           {Array.isArray(data.descriptions)
             ? data.descriptions.join(' ')
             : data.descriptions}
