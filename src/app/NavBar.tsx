@@ -13,11 +13,6 @@ import Spinner from '@/components/Spinner/Spinner'
 
 const links = [
   {
-    id: 1,
-    label: 'Dashboard',
-    href: '/dashboard',
-  },
-  {
     id: 2,
     label: 'Issues',
     href: '/issues/list',

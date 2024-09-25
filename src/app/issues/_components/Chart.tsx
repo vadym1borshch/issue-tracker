@@ -9,7 +9,7 @@ interface IChartProps {
   closed: number
 }
 
-const Chart = ({ open, closed, inProgress }: IChartProps) => {
+const Chart = ({ open = 0, closed = 0, inProgress = 0 }: IChartProps) => {
   const data = [
     { label: 'Open', value: open },
     { label: 'Closed', value: closed },
@@ -17,12 +17,16 @@ const Chart = ({ open, closed, inProgress }: IChartProps) => {
   ]
 
   return (
-    <Card >
+    <Card>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <XAxis dataKey="label" />
           <YAxis />
-          <Bar dataKey="value" barSize={50} style={{fill: "var(--green-9)"}}/>
+          <Bar
+            dataKey="value"
+            barSize={50}
+            style={{ fill: 'var(--green-9)' }}
+          />
         </BarChart>
       </ResponsiveContainer>
     </Card>

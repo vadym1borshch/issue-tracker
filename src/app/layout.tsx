@@ -3,7 +3,6 @@ import { ReactNode } from 'react'
 import localFont from 'next/font/local'
 import './globals.css'
 import MainProvider from '@/app/MainProvider'
-import NavBar from '@/app/NavBar'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -33,7 +32,6 @@ export default function RootLayout({
       >
         <MainProvider>
          {children}
-          {/*<ThemePanel />*/}
         </MainProvider>
       </body>
     </html>

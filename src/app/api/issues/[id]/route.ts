@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../prisma/client'
 import {
-  issueSchema,
   patchIssueSchema,
 } from '@/app/api/issues/validationSchemas'
 import { getServerSession } from 'next-auth'
