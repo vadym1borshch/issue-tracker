@@ -8,7 +8,7 @@ import Link from '@/components/Link/Link'
 import NextLink from 'next/link'
 import FilterStatusSelect from '@/app/issues/_components/FilterStatusSelect'
 import prisma from '../../../../prisma/client'
-import styles from './list.module.css'
+import Pagination from '@/components/Pagination/Pagination'
 
 const columns: {
   id: number
@@ -22,7 +22,7 @@ const columns: {
 ]
 
 interface IIssuesPageProps {
-  searchParams: { status: Status; orderBy: keyof Issue }
+  searchParams: { status: Status; orderBy: keyof Issue; page: string }
 }
 
 const IssuesPage = async ({ searchParams }: IIssuesPageProps) => {
@@ -37,9 +37,22 @@ const IssuesPage = async ({ searchParams }: IIssuesPageProps) => {
     ? { [searchParams.orderBy]: 'asc' }
     : undefined
 
+  const page = parseInt(searchParams.page) || 1
+  const pageSize = 10
+
+  const where = {
+    status: validStatus,
+  }
+
   const issues = await prisma.issue.findMany({
-    where: { status: validStatus },
+    where,
     orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  })
+
+  const issueCount = await prisma.issue.count({
+    where,
   })
 
   return (
@@ -100,6 +113,11 @@ const IssuesPage = async ({ searchParams }: IIssuesPageProps) => {
           </Table.Body>
         </Table.Root>
       </Box>
+      <Pagination
+        itemCount={issueCount}
+        currentPage={page}
+        pageSize={pageSize}
+      />
     </Box>
   )
 }
