@@ -1,0 +1,10 @@
+.my-element::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 10px;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

@@ -8,7 +8,7 @@ const statusMap: Record<
 > = {
   OPEN: { label: 'Open', color: 'red' },
   IN_PROGRESS: { label: 'In Progress', color: 'violet' },
-  CLOSE: { label: 'Close', color: 'red' },
+  CLOSE: { label: 'Close', color: 'green' },
 }
 
 interface IIssueStatusBadgeProps {

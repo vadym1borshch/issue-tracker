@@ -5,6 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import { Theme } from '@radix-ui/themes'
 import { ToastProvider } from '@/contexts/ToastProvider'
 import NavBar from '@/app/NavBar'
+import QueryContext from '@/contexts/queryContext'
 
 type Theme = 'light' | 'dark'
 
@@ -49,12 +50,14 @@ const MainProvider = ({ children }: IThemeProviderProps) => {
         panelBackground="solid"
         radius="large"
       >
-        <ToastProvider>
+        <QueryContext>
           <SessionProvider>
-            <NavBar />
-            <main>{children}</main>
+            <ToastProvider>
+              <NavBar />
+              <main>{children}</main>
+            </ToastProvider>
           </SessionProvider>
-        </ToastProvider>
+        </QueryContext>
       </Theme>
     </ThemeContext.Provider>
   )

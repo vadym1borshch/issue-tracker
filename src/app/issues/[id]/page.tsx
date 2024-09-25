@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown'
 import Link from '@/components/Link/Link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/authOptions'
+import AssigneeSelect from '@/app/issues/_components/Select'
 
 interface IIssueDetailsProps {
   params: { id: string }
@@ -14,7 +15,7 @@ interface IIssueDetailsProps {
 
 const IssueDetails = async ({ params: { id } }: IIssueDetailsProps) => {
   const session = await getServerSession(authOptions)
-  const { data } = await API.get<Issue>(`issues/${id}`)
+  const { data } = await API.get<Issue>(`/issues/${id}`)
 
   return (
     <Box>
@@ -23,8 +24,8 @@ const IssueDetails = async ({ params: { id } }: IIssueDetailsProps) => {
         <IssueStatusBadge status={data.status} />
         <Box>{new Date(data.createdAt).toDateString()}</Box>
       </Flex>
-      <Card className="prose relative">
-        <ReactMarkdown className="text-white">
+      <Card className="prose relative bg-white">
+        <ReactMarkdown className="text-black bg-white">
           {Array.isArray(data.descriptions)
             ? data.descriptions.join(' ')
             : data.descriptions}
@@ -37,6 +38,8 @@ const IssueDetails = async ({ params: { id } }: IIssueDetailsProps) => {
           </Box>
         )}
       </Card>
+      <AssigneeSelect issue={data} />
+
     </Box>
   )
 }

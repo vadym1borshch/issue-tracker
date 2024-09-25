@@ -1,21 +1,50 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { Box, Button, Table } from '@radix-ui/themes'
-import { API } from '@/app/api/axiosInstance'
 import { MdDelete } from 'react-icons/md'
 import DeleteButton from '@/components/Button/DeleteButton'
 import IssueStatusBadge from '@/components/IssueStatusBadge/IssueStatusBadge'
-import { Issue } from '@prisma/client'
+import { Issue, Status } from '@prisma/client'
 import Link from '@/components/Link/Link'
+import NextLink from 'next/link'
+import FilterStatusSelect from '@/app/issues/_components/FilterStatusSelect'
+import prisma from '../../../../prisma/client'
+import styles from './list.module.css'
+
+const columns: {
+  id: number
+  label: string
+  value: keyof Issue
+  className?: string
+}[] = [
+  { id: 1, label: 'Issue', value: 'title' },
+  { id: 2, label: 'Status', value: 'status' },
+  { id: 3, label: 'Created', value: 'createdAt' },
+]
 
 interface IIssuesPageProps {
-  children?: ReactNode
+  searchParams: { status: Status; orderBy: keyof Issue }
 }
 
-const IssuesPage = async ({}: IIssuesPageProps) => {
-  const { data } = await API.get(`/issues`)
+const IssuesPage = async ({ searchParams }: IIssuesPageProps) => {
+  const statuses = Object.values(Status)
+  const validStatus = statuses.includes(searchParams.status)
+    ? searchParams.status
+    : undefined
+
+  const issues = await prisma.issue.findMany({
+    where: { status: validStatus },
+  })
 
   return (
     <Box className="flex flex-col gap-4 p-4">
+      <Box className="flex justify-between">
+        <FilterStatusSelect />
+        <Button className="w-[220px]">
+          <Link className="w-full" href="/issues/new">
+            Add new Issue
+          </Link>
+        </Button>
+      </Box>
       <Box>
         <Table.Root
           variant="surface"
@@ -23,15 +52,25 @@ const IssuesPage = async ({}: IIssuesPageProps) => {
         >
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Created</Table.ColumnHeaderCell>
+              {columns.map((column) => (
+                <Table.ColumnHeaderCell key={column.id}>
+                  <NextLink
+                    className={`relative transition duration-200 ease-in-out hover:text-gray-400 ${searchParams.orderBy === column.value ? 'text-gray-400' : 'text-black'}`}
+                    href={{
+                      query: { ...searchParams, orderBy: column.value },
+                    }}
+                  >
+                    {column.label}
+                  </NextLink>
+                </Table.ColumnHeaderCell>
+              ))}
+
               <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            {data.map((issue: Issue) => (
+            {issues.map((issue: Issue) => (
               <Table.Row key={issue.id}>
                 <Table.Cell>
                   <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
@@ -43,20 +82,16 @@ const IssuesPage = async ({}: IIssuesPageProps) => {
                   {new Date(issue.createdAt).toLocaleString()}
                 </Table.Cell>
                 <Table.Cell>
-                  <DeleteButton issueId={issue.id}>
-                    <MdDelete />
-                  </DeleteButton>
+                  {issue.assignedToUserId && (
+                    <DeleteButton issueId={issue.id}>
+                      <MdDelete />
+                    </DeleteButton>
+                  )}
                 </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table.Root>
-      </Box>
-
-      <Box className="flex justify-end">
-        <Button className="w-[220px]">
-          <Link href="/issues/new">Add new Issue</Link>
-        </Button>
       </Box>
     </Box>
   )
